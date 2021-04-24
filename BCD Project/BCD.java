@@ -94,6 +94,7 @@ class BCD {
     public BCD multiplyBCDs(BCD other){
         int[] a = new int[]{};
         BCD answerBCD = new BCD(a);
+        BCD zeroBCD = new BCD(0);
         int [][] matrix = new int[other.numberOfDigits()][numberOfDigits()];
         for(int i =0; i<matrix.length; i++){
             for(int j = 0; j<matrix[0].length; j++){
@@ -115,63 +116,35 @@ class BCD {
             remaining = remaining/10;
             answerBCD.addADigit(ones);
         }
+        int sum1 = 0;
+        for(int i = 0; i< answerBCD.numberOfDigits(); i++){
+            sum1 += answerBCD.nthDigit(i);
+            if(sum1 >0){
+                break;
+            }
+        }
+        if(sum1 == 0){
+            return zeroBCD;
+        }
         return answerBCD;
     }
+    public static BCD factorial(int num){
+        BCD factorial1 = new BCD(num);
+        BCD one = new BCD(1);
+        if(num == 0){
+            return one;
+        }
+        return factorial1.multiplyBCDs(factorial(num-1));
+    }
+    public BCD pow(int num){
+        BCD base = new BCD(digits);
+        BCD number = new BCD(digits);
+        for(int i = 1; i<num; i++){
+            base = base.multiplyBCDs(number);
+        }
+        return base;
+    }
     public static void main(String[] args){
-        //Section 5 Testcase 1
-        int[] number1 = new int[]{7,5,8,4};
-        int[] number2 = new int[]{9,2,3};
-        BCD f = new BCD(number1);
-        BCD f1 = new BCD(number2);
-        System.out.println("First number is " + f);
-        System.out.println("Second number is " + f1);
-        System.out.println(f + " times " + f1 + " = " + f.multiplyBCDs(f1));
-        System.out.println();
-        //Section 5 Testcase 2
-        BCD f3 = new BCD(4583);
-        BCD f4 = new BCD(8293);
-        System.out.println("First number is " + f3);
-        System.out.println("Second number is " + f4);
-        System.out.println(f3 + " times " + f4 + " = " + f3.multiplyBCDs(f4));
-        System.out.println();
-        //Section 5 Testcase 3
-        BCD f5 = new BCD(4);
-        BCD f6 = new BCD(67);
-        System.out.println("First number is " + f5);
-        System.out.println("Second number is " + f6);
-        System.out.println(f5 + " times " + f6 + " = " + f5.multiplyBCDs(f6));
-        System.out.println();
-        //Section 5 Testcase 4
-        BCD f7 = new BCD(5);
-        BCD f8 = new BCD(2);
-        System.out.println("First number is " + f7);
-        System.out.println("Second number is " + f8);
-        System.out.println(f7 + " times " + f8 + " = " + f7.multiplyBCDs(f8));
-        System.out.println();
-        //Section 5 Testcase 5
-        BCD f9 = new BCD(0);
-        BCD f10 = new BCD(920);
-        System.out.println("First number is " + f9);
-        System.out.println("Second number is " + f10);
-        System.out.println(f9 + " times " + f10 + " = " + f9.multiplyBCDs(f10));
-        System.out.println();
-        //Section 5 Testcase 6
-        number1 = new int[]{1,2,3,4,2,0,4,2,4,5};
-        number2 = new int[]{5,3,2,8,4,2,5,8,8,5};
-        BCD f11 = new BCD(number1);
-        BCD f12 = new BCD(number2);
-        System.out.println("First number is " + f11);
-        System.out.println("Second number is " + f12);
-        System.out.println(f11 + " times " + f12 + " = " + f11.multiplyBCDs(f12));
-        System.out.println();
-        //Section 5 Testcase 7
-        number1 = new int[]{3,3,5,3,4,1,4,5};
-        number2 = new int[]{0,3,4,5,2,3};
-        BCD f13 = new BCD(number1);
-        BCD f14 = new BCD(number2);
-        System.out.println("First number is " + f13);
-        System.out.println("Second number is " + f14);
-        System.out.println(f13 + " times " + f14 + " = " + f13.multiplyBCDs(f14));
-        System.out.println();
+
     }
 }
