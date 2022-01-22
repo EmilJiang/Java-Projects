@@ -15,7 +15,7 @@ public class endscreen extends JPanel implements ActionListener {
     private JButton playagain;
     public endscreen(boolean win)
     {
-        Timer timer = new Timer(20, this);
+        Timer timer = new Timer(30, this);
         panel = new endscreenPanel();
         frame = new JFrame();
         Win = win;
@@ -46,14 +46,14 @@ public class endscreen extends JPanel implements ActionListener {
         menu.getInputMap().put(KeyStroke.getKeyStroke("SPACE"), "none");
         panel.add(menu);
 
-        playagain = new JButton("play again");
+        playagain = new JButton("Play Again");
         playagain.setOpaque(true);
         playagain.setBorderPainted(false);
         playagain.setContentAreaFilled(false);
-        playagain.setFont(new Font("Arial", Font.PLAIN, 25));
+        playagain.setFont(new Font("Arial", Font.PLAIN, 65));
         playagain.setForeground(Color.GREEN);
         playagain.setBackground(Color.BLACK);
-        playagain.setBounds(290,450,200,100);
+        playagain.setBounds(200,450,400,100);
         playagain.addActionListener(this);
         playagain.setActionCommand("playagain");
         playagain.getInputMap().put(KeyStroke.getKeyStroke("SPACE"), "none");
@@ -89,14 +89,14 @@ public class endscreen extends JPanel implements ActionListener {
     protected void repaint(Graphics g) {
         super.paintComponent(g);
         g.setColor(Color.GREEN);
-        g.setFont(new Font("Arial", Font.BOLD, 100));
+        g.setFont(new Font("Arial", Font.BOLD, 200));
         if(Win){
-            g.drawString("You",300,300);
-            g.drawString("Win",300,400);
+            g.drawString("You",200,250);
+            g.drawString("Win",215,425);
         }
         else{
-            g.drawString("You",300,300);
-            g.drawString("Lose",275,400);
+            g.drawString("You",200,250);
+            g.drawString("Lose",175,425);
         }
         g.setColor(Color.white);
         for(int i = 0; i<150; i++){
@@ -106,6 +106,6 @@ public class endscreen extends JPanel implements ActionListener {
         }
     }
     public static void main(String args[]){
-        ends = new endscreen(true);
+        ends = new endscreen(false);
     }
 }
