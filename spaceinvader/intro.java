@@ -11,6 +11,7 @@ public class intro extends JPanel implements ActionListener {
     private final JButton easy;
     private final JButton medium;
     private final JButton hard;
+    private final JButton impossible;
     private final JButton quit;
     private final Rectangle invader;
     private int xincrement;
@@ -22,13 +23,13 @@ public class intro extends JPanel implements ActionListener {
         frame = new JFrame();
         panel1 = new IntroPanel();
         panel1.setLayout(null);
-
         invader = new Rectangle(1,1,100,100);
         Timer timer = new Timer(20, this);
 
         quit = new JButton("quit");
         quit.setOpaque(true);
         quit.setBorderPainted(false);
+        quit.setContentAreaFilled(false);
         quit.setFont(new Font("Arial", Font.PLAIN, 25));
         quit.setForeground(Color.GREEN);
         quit.setBackground(Color.BLACK);
@@ -41,10 +42,11 @@ public class intro extends JPanel implements ActionListener {
         easy = new JButton("Easy");
         easy.setOpaque(true);
         easy.setBorderPainted(false);
-        easy.setFont(new Font("Arial", Font.PLAIN, 70));
+        easy.setContentAreaFilled(false);
+        easy.setFont(new Font("Arial", Font.PLAIN, 50));
         easy.setForeground(Color.GREEN);
         easy.setBackground(Color.BLACK);
-        easy.setBounds(275,350,250,100);
+        easy.setBounds(310,350,175,100);
         easy.addActionListener(this);
         easy.setActionCommand("easy");
         easy.getInputMap().put(KeyStroke.getKeyStroke("SPACE"), "none");
@@ -53,10 +55,11 @@ public class intro extends JPanel implements ActionListener {
         medium = new JButton("Medium");
         medium.setOpaque(true);
         medium.setBorderPainted(false);
-        medium.setFont(new Font("Arial", Font.PLAIN, 70));
+        medium.setContentAreaFilled(false);
+        medium.setFont(new Font("Arial", Font.PLAIN, 50));
         medium.setForeground(Color.GREEN);
         medium.setBackground(Color.BLACK);
-        medium.setBounds(275,450,295,100);
+        medium.setBounds(278,425,225,100);
         medium.addActionListener(this);
         medium.setActionCommand("medium");
         medium.getInputMap().put(KeyStroke.getKeyStroke("SPACE"), "none");
@@ -65,14 +68,28 @@ public class intro extends JPanel implements ActionListener {
         hard = new JButton("Hard");
         hard.setOpaque(true);
         hard.setBorderPainted(false);
-        hard.setFont(new Font("Arial", Font.PLAIN, 70));
+        hard.setContentAreaFilled(false);
+        hard.setFont(new Font("Arial", Font.PLAIN, 50));
         hard.setForeground(Color.GREEN);
         hard.setBackground(Color.BLACK);
-        hard.setBounds(275,550,250,100);
+        hard.setBounds(310,500,175,100);
         hard.addActionListener(this);
         hard.setActionCommand("hard");
         hard.getInputMap().put(KeyStroke.getKeyStroke("SPACE"), "none");
         panel1.add(hard);
+
+        impossible = new JButton("Impossible");
+        impossible.setOpaque(true);
+        impossible.setBorderPainted(false);
+        impossible.setContentAreaFilled(false);
+        impossible.setFont(new Font("Arial", Font.PLAIN, 50));
+        impossible.setForeground(Color.GREEN);
+        impossible.setBackground(Color.BLACK);
+        impossible.setBounds(255,575,285,100);
+        impossible.addActionListener(this);
+        impossible.setActionCommand("impossible");
+        impossible.getInputMap().put(KeyStroke.getKeyStroke("SPACE"), "none");
+        panel1.add(impossible);
 
 
 
@@ -137,6 +154,10 @@ public class intro extends JPanel implements ActionListener {
             frame.dispose();
             gamescreen.artp = new gamescreen("hard");
         }
+        if(Objects.equals(eventName, "impossible")){
+            frame.dispose();
+            gamescreen.artp = new gamescreen("impossible");
+        }
 
         panel1.repaint();
     }
@@ -147,7 +168,7 @@ public class intro extends JPanel implements ActionListener {
         g.setFont(new Font("Arial", Font.BOLD, 150));
 
         g.drawString("Space", 175,200);
-        g.drawString("Invaders", 75,325);
+        g.drawString("Invaders", 85,325);
 
         g.setColor(Color.white);
         for(int i = 0; i<150; i++){
