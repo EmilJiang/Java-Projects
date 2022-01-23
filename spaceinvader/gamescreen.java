@@ -68,9 +68,9 @@ public class gamescreen implements ActionListener, KeyListener {
             lives = 1;
             spaceout = 70;
             startspaceout = 0;
-            rows = 40;
+            rows = 30;
             invaderspeed = 2;
-            bspeed = 8;
+            bspeed = 5;
         }
         colll = false;
         coll = false;
@@ -78,7 +78,7 @@ public class gamescreen implements ActionListener, KeyListener {
         left = false;
         invader = new ArrayList<Rectangle>();
         shoot = false;
-        bulletSpeed = 20;
+        bulletSpeed = 25;
         readyFire = true;
         score = 0;
         start = true;
@@ -126,13 +126,13 @@ public class gamescreen implements ActionListener, KeyListener {
     public void right()
     {
         if(player.x<750){
-            player.x+=20;
+            player.x+=30;
         }
     }
     public void left()
     {
         if(player.x>0){
-            player.x-=20;
+            player.x-=30;
         }
     }
     public void shoot(){
@@ -235,15 +235,9 @@ public class gamescreen implements ActionListener, KeyListener {
                 bxpos2 = invader.get(randominvader).x;
                 bypos2 = invader.get(randominvader).y;
             }
-            if(bypos3>800 || start){
-                int randominvader = (int) (invader.size() * Math.random());
-                bxpos3 = invader.get(randominvader).x;
-                bypos3 = invader.get(randominvader).y;
-            }
             bypos += bspeed;
             bypos1 += bspeed;
             bypos2 += bspeed;
-            bypos3 += bspeed;
         }
         String eventName = e.getActionCommand();
         if(Objects.equals(eventName, "menu")){
@@ -361,6 +355,26 @@ public class gamescreen implements ActionListener, KeyListener {
                 colll = false;
             }
         }
+        else if(level.equals("hard")){
+            Rectangle f1 = new Rectangle(bxpos1,bypos1,0,0);
+            Rectangle f2 = new Rectangle(bxpos2,bypos2,0,0);
+            if(collision(player,f,"p")){
+                colll = true;
+                bypos = 900;
+            }
+            if(collision(player,f1,"p")){
+                colll = true;
+                bypos1 = 900;
+            }
+            if(collision(player,f2,"p")){
+                colll = true;
+                bypos1 = 900;
+            }
+            if(colll){
+                lives-=1;
+                colll = false;
+            }
+        }
         panel.repaint();
     }
     public void repaint(Graphics g)
@@ -399,14 +413,23 @@ public class gamescreen implements ActionListener, KeyListener {
         }
         if(!start){
             g.setColor(Color.white);
-            g.fillOval(bxpos,bypos,20,20);
-            if(level.equals("medium")){
+            if(level.equals("easy")){
+                g.fillOval(bxpos,bypos,20,20);
+            }
+            else if(level.equals("medium")){
+                g.fillOval(bxpos,bypos,20,20);
                 g.fillOval(bxpos1,bypos1,20,20);
             }
             else if(level.equals("impossible")){
+                g.fillOval(bxpos,bypos,20,20);
                 g.fillOval(bxpos1,bypos1,20,20);
                 g.fillOval(bxpos2,bypos2,20,20);
                 g.fillOval(bxpos3,bypos3,20,20);
+            }
+            else if(level.equals("hard")){
+                g.fillOval(bxpos,bypos,20,20);
+                g.fillOval(bxpos1,bypos1,20,20);
+                g.fillOval(bxpos2,bypos2,20,20);
             }
         }
         score = (rows*10) - (10* invader.size());
