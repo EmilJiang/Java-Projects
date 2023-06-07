@@ -9,7 +9,6 @@ import java.util.Objects;
 
 
 public class gamescreen implements ActionListener, KeyListener {
-    public final int WIDTH = 800, HEIGHT = 800;
     public static gamescreen artp;
     private JFrame jframe;
     private Rectangle player;
@@ -20,7 +19,7 @@ public class gamescreen implements ActionListener, KeyListener {
     private boolean readyFire;
     private int bulletSpeed;
     private boolean shoot;
-    private int score;
+    public int score;
     private boolean right, left;
     private boolean coll;
     private ArrayList<Rectangle> invader;
@@ -51,7 +50,7 @@ public class gamescreen implements ActionListener, KeyListener {
         else if(level.equals("medium")){
             lives = 3;
             spaceout = 60;
-            startspaceout = 30;
+            startspaceout = 40;
             rows = 30;
             invaderspeed = 2;
             bspeed = 5;
@@ -78,7 +77,7 @@ public class gamescreen implements ActionListener, KeyListener {
         left = false;
         invader = new ArrayList<Rectangle>();
         shoot = false;
-        bulletSpeed = 25;
+        bulletSpeed = 15;
         readyFire = true;
         score = 0;
         start = true;
@@ -148,7 +147,7 @@ public class gamescreen implements ActionListener, KeyListener {
             }
         }
         else{
-            if(d<23){
+            if(d<25){
                 return true;
             }
         }
@@ -158,9 +157,16 @@ public class gamescreen implements ActionListener, KeyListener {
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        if(score == 300){
+        jframe.setFocusable(true);
+        if(score == 0){
             gameOver = true;
             wincondition = true;
+            jframe.dispose();
+        }
+        else if(lives <= 0){
+            gameOver = true;
+            wincondition = false;
+            jframe.dispose();
         }
         if(gameOver){
             jframe.dispose();
@@ -168,7 +174,7 @@ public class gamescreen implements ActionListener, KeyListener {
             timer.stop();
             endscreen.ends = new endscreen(wincondition);
         }
-        jframe.setFocusable(true);
+        col();
         if(level.equals("easy")){
             if(bypos>800 || start){
                 int randominvader = (int) (invader.size() * Math.random());
@@ -216,8 +222,6 @@ public class gamescreen implements ActionListener, KeyListener {
             bypos1 += bspeed;
             bypos2 += bspeed;
             bypos3 += bspeed;
-
-
         }
         else if(level.equals("hard")){
             if(bypos>800 || start){
@@ -239,8 +243,10 @@ public class gamescreen implements ActionListener, KeyListener {
             bypos1 += bspeed;
             bypos2 += bspeed;
         }
+       col();
         String eventName = e.getActionCommand();
         if(Objects.equals(eventName, "menu")){
+            timer.stop();
             jframe.dispose();
             intro.intro1 = new intro();
         }
@@ -253,11 +259,7 @@ public class gamescreen implements ActionListener, KeyListener {
             shoot = false;
             bullet = new Rectangle(player.x+10, player.y-15, 5,20);
         }
-
-        if(lives <= 0){
-            gameOver = true;
-            wincondition = false;
-        }
+        col();
         int max1 = 0;
         int min1 = 99999;
         int mostRight = 0;
@@ -276,9 +278,13 @@ public class gamescreen implements ActionListener, KeyListener {
                 mostLeft = i;
             }
         }
-        if(invader.get(mostDown).y>675){
+        if(!gameOver && invader.get(mostDown).y>660){
             gameOver = true;
             wincondition = false;
+            jframe.dispose();
+            gameOver = false;
+            timer.stop();
+            endscreen.ends = new endscreen(wincondition);
         }
         if(right){
             if (!start && invader.get(mostRight).x<750){
@@ -308,6 +314,10 @@ public class gamescreen implements ActionListener, KeyListener {
                 }
             }
         }
+        col();
+        panel.repaint();
+    }
+    private void col(){
         Rectangle f = new Rectangle(bxpos,bypos,0,0);
         if(level.equals("easy")){
             if(collision(player,f,"p")){
@@ -318,80 +328,101 @@ public class gamescreen implements ActionListener, KeyListener {
         else if(level.equals("medium")){
             Rectangle f1 = new Rectangle(bxpos1,bypos1,0,0);
             if(collision(player,f,"p")){
-                colll = true;
+                lives-=1;
                 bypos = 900;
             }
             if(collision(player,f1,"p")){
-                colll = true;
+                lives-=1;
                 bypos1 = 900;
             }
-            if(colll){
-                lives-=1;
-                colll = false;
-            }
+
         }
         else if(level.equals("impossible")){
             Rectangle f1 = new Rectangle(bxpos1,bypos1,0,0);
             Rectangle f2 = new Rectangle(bxpos2,bypos2,0,0);
             Rectangle f3 = new Rectangle(bxpos3,bypos3,0,0);
             if(collision(player,f,"p")){
-                colll = true;
+                lives-=1;
                 bypos = 900;
             }
             if(collision(player,f1,"p")){
-                colll = true;
+                lives-=1;
                 bypos1 = 900;
             }
             if(collision(player,f2,"p")){
-                colll = true;
+                lives-=1;
                 bypos1 = 900;
             }
             if(collision(player,f3,"p")){
-                colll = true;
-                bypos1 = 900;
-            }
-            if(colll){
                 lives-=1;
-                colll = false;
+                bypos1 = 900;
             }
         }
         else if(level.equals("hard")){
             Rectangle f1 = new Rectangle(bxpos1,bypos1,0,0);
             Rectangle f2 = new Rectangle(bxpos2,bypos2,0,0);
             if(collision(player,f,"p")){
-                colll = true;
+                lives-=1;
                 bypos = 900;
             }
             if(collision(player,f1,"p")){
-                colll = true;
+                lives-=1;
                 bypos1 = 900;
             }
             if(collision(player,f2,"p")){
-                colll = true;
+                lives-=1;
                 bypos1 = 900;
             }
-            if(colll){
-                lives-=1;
-                colll = false;
-            }
         }
-        panel.repaint();
+    }
+    private void invaderdraw(Graphics g, int x, int y){
+        g.setColor(Color.GREEN);
+        g.fillRect(x,y,5,5);
+        g.fillRect(x,y+3,5,5);
+        g.fillRect(x+3,y+3,5,2);
+        g.fillRect(x-3,y+3,5,2);
+        g.fillRect(x+2,y+5,9,3);
+        g.fillRect(x-6,y+5,9,3);
+
+        g.fillRect(x+8,y+7,3,11);
+        g.fillRect(x-6,y+7,3,11);
+
+        g.fillRect(x+7,y+8,7,7);
+        g.fillRect(x-9,y+8,7,7);
+
+        g.fillRect(x,y+6,5,5);
+        g.fillRect(x,y+9,5,9);
+        g.fillRect(x-4,y+11,7,5);
+        g.fillRect(x+2,y+11,7,5);
+
+        g.fillRect(x+11,y+18,3,3);
+        g.fillRect(x-9,y+18,3,3);
+
+        g.fillRect(x+8,y+21,3,3);
+        g.fillRect(x-6,y+21,3,3);
+    }
+    private void playerdraw(Graphics g, int x, int y){
+        g.setColor(Color.red);
+        g.fillRect(x,y,30,10);
+        g.fillRect(x+11,y-6,8,8);
+        g.fillRect(x+13,y-9,4,4);
     }
     public void repaint(Graphics g)
     {
         if(start){
-            g.drawImage(new ImageIcon("images/playertest30.gif").getImage(),400,700, null);
+            playerdraw(g, 400, 700);
             for(int i =0; i<invader.size(); i++){
-                g.drawImage(new ImageIcon("images/invader.gif").getImage(),invader.get(i).x,invader.get(i).y, null);
+                invaderdraw(g,invader.get(i).x,invader.get(i).y);
             }
             g.setColor(Color.white);
-            g.setFont(new Font("Arial", Font.BOLD, 50));
-            g.drawString("SHOOT OR MOVE TO START", 50,400);
+            g.setFont(new Font("Arial", Font.BOLD, 25));
+            g.drawString("SHOOT(SPACE) OR MOVE(LEFT AND RIGHT ARROW)", 50,400);
+            g.drawString("TO START",300,450);
         }
         else{
             for(int i =0; i<invader.size(); i++){
                 if(!collision(invader.get(i),bullet,"player")){
-                    g.drawImage(new ImageIcon("images/invader.gif").getImage(),invader.get(i).x,invader.get(i).y, null);
+                    invaderdraw(g,invader.get(i).x,invader.get(i).y);
                 }
                 else{
                     coll = true;
@@ -399,7 +430,7 @@ public class gamescreen implements ActionListener, KeyListener {
                 }
 
             }
-            g.drawImage(new ImageIcon("images/playertest30.gif").getImage(),player.x,700, null);
+            playerdraw(g, player.x, 700);
         }
         if(shoot && !coll){
             g.setColor(Color.white);
@@ -432,18 +463,23 @@ public class gamescreen implements ActionListener, KeyListener {
                 g.fillOval(bxpos2,bypos2,20,20);
             }
         }
-        score = (rows*10) - (10* invader.size());
+        if(!level.equals("impossible")){
+            score = (30) - (30-invader.size());
+        }
+        else{
+            score = (40) - (40-invader.size());
+        }
         g.setColor(Color.white);
         g.setFont(new Font("Arial", Font.BOLD, 25));
-        g.drawString("Score: ", 0,25);
+        g.drawString("Aliens left:  ", 0,25);
         g.drawString("Lives: " ,350, 25);
-        g.drawString(Integer.toString(score), 80,25);
+        g.drawString(Integer.toString(score), 135,25);
         g.drawString(Integer.toString(lives), 425,25);
 
     }
 
     public static void main(String[] args){
-        artp = new gamescreen("medium");
+        artp = new gamescreen("easy");
     }
 
     @Override
@@ -458,14 +494,18 @@ public class gamescreen implements ActionListener, KeyListener {
             if(start){
                 start = false;
             }
+            col();
             right();
+            col();
         }
         else if (e.getKeyCode() == KeyEvent.VK_LEFT)
         {
             if(start){
                 start = false;
             }
+            col();
             left();
+            col();
         }
 
     }
